@@ -1,31 +1,47 @@
+#pragma once
+
 #include <vector>
 #include <unordered_map>
+#include <functional>
 
-class State {
+// prototype for TransitionFunction usage
+class State;
+
+class TransitionFunction
+{
+    public:
+        // constructor
+        // set result state to NULL by default
+        TransitionFunction(std::function<bool(void)> transitionFunc);
+        std::function<bool(void)> transitionCheckFunction;
+        State* resultState;
+        void setResultState(State* resultState);
+};
+
+class State
+{
     private:
         // vector of boolean function pointers
-        std::vector<bool (*)()> transitionCheckFuncs;
+        std::vector<TransitionFunction*>* transitionCheckFuncs;
     public:
         virtual void callback() = 0;
         // to be called in the constructors of each state definition
-        void appendTransitionCheck(bool (*transitionFunc)());
-        const std::vector<bool (*)()> getTransitionFuncs();
-        // to allow for generic destruction
-        virtual ~State() = default;
+        void appendTransitionCheck(TransitionFunction* transitionFunc);
+        const std::vector<TransitionFunction*> getTransitionFuncs();
+        // constructor for instantiating
+        State();
+        // allows for all sub-destructors to be called
+        virtual ~State();
 };
 
-typedef struct {
-    bool (*transitionCheckFunc)();
-    State* resultState;
-} TransitionLink;
-
-class StateMap {
+class StateMap
+{
     // access the transistion check functions for each given state
     // then, that function is connected to the state that will be
     // transitioned to IF the transition function returns true
     private:
         std::unordered_map<State*,
-                           std::vector<TransitionLink>*>* stateMap;
+                           std::vector<TransitionFunction*>*>* stateMap;
     public:
         // will append all the transition check functions,
         // but will set the result state to "NULL"
@@ -45,3 +61,4 @@ class StateMap {
         // should delete all states and the list of transition funcs
         ~StateMap();
 };
+

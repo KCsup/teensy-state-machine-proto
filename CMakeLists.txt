@@ -10,5 +10,8 @@ include_directories(include)
 
 add_executable(teensy_sm_proto
     src/main.cpp
+    src/state.cpp
+    src/states/idle_state.cpp
+    src/states/hang_state.cpp
 )
 
