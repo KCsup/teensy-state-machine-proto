@@ -21,6 +21,10 @@ int main()
     // main execution
     while(true)
     {
+        // if the end of traversal has been reached
+        if(currentState == NULL)
+            break;
+        
         currentState->callback();
         for(TransitionFunction* transitionFunc : currentState->getTransitionFuncs())
         {

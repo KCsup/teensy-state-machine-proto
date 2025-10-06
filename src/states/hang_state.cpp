@@ -6,10 +6,10 @@ void HangState::callback()
     std::cout << "Hanging state." << std::endl;
 }
 
-HangState::HangState() : State()
+HangState::HangState() : State(), keyPressed(false)
 {
     // will loop infinitely
-    this->appendTransitionCheck(new TransitionFunction([]() -> bool {
-                                                       return false;
+    this->appendTransitionCheck(new TransitionFunction([this]() -> bool {
+                                                       return this->keyPressed;
                                                    }));
 }
