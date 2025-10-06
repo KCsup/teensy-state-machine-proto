@@ -29,3 +29,17 @@ void StateMap::setTransitionCheckResult(State* state,
 {
     this->stateMap->at(state)->at(checkFuncIndex).resultState = resultState;
 }
+
+StateMap::StateMap()
+    : stateMap(new std::unordered_map<State*,
+                                      std::vector<TransitionLink>*>)
+{}
+
+StateMap::~StateMap()
+{
+    for(std::pair<State*, std::vector<TransitionLink>*> mapPair : *this->stateMap)
+    {
+        delete mapPair.first;
+        delete mapPair.second;
+    }
+}

@@ -10,7 +10,8 @@ class State {
         // to be called in the constructors of each state definition
         void appendTransitionCheck(bool (*transitionFunc)());
         const std::vector<bool (*)()> getTransitionFuncs();
-        
+        // to allow for generic destruction
+        virtual ~State() = default;
 };
 
 typedef struct {
@@ -37,6 +38,9 @@ class StateMap {
         void setTransitionCheckResult(State* state,
                                       int checkFuncIndex,
                                       State* resultState);
+        // constructor
+        // instantiates the stateMap map
+        StateMap();
         // destructor
         // should delete all states and the list of transition funcs
         ~StateMap();
