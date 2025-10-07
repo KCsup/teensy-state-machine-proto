@@ -15,7 +15,7 @@ void IdleState::callback()
 
 IdleState::IdleState() : State(), startTime(timeSec())
 {
-    auto tenSecondCheck = [this]() -> bool {
+    std::function<bool(void)> tenSecondCheck = [this]() -> bool {
         return (timeSec() - this->startTime) >= 10;
     };
 
